@@ -1,0 +1,21 @@
+library(caTools)
+library(ggplot2)
+#data-preprocessing
+datasets$Area=factor(datasets$Area,levels = "Ramapuram",labels = 1)
+datasets$Zone = factor(datasets$Zone)
+datasets$Time = factor(datasets$Time,levels = c("Morning","Afternoon","Evening","Night"))
+datasets$People.Frequency = factor(datasets$People.Frequency,levels = c("Low","Medium","High"))
+datasets$Is.Police_Station = factor(datasets$Is.Police_Station,levels = c("Yes","No"))
+datasets$Is.Bar = factor(datasets$Is.Bar,levels = c("Yes","No"))
+datasets$Tier = factor(datasets$Tier,levels = c("Inner","Middle","Outer"))
+datasets$Residence.Level = factor(datasets$Residence.Level,levels = c("Low","Medium","High"))
+datasets$Class = factor(datasets$Class,levels = c("Safe","Unsafe"))
+#data seperation
+set.seed(123)
+split = sample.split(datasets$Class,SplitRatio = 0.75)
+training_set = subset(datasets,split==TRUE)
+test_set = subset(datasets,split==FALSE)
+#binomialregression
+resgressor = glm(Class~Zone+Time+People.Frequency+Is.Police_Station+Is.Bar+Residence.Level,family = "binomial",data = training_set)
+predict_set = predict.glm(resgressor,type = "response",test_set)
+View(predict_set)
