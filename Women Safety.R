@@ -38,13 +38,13 @@ test_pca_set = predict(pca,test_set)
 test_pca_set = test_pca_set[c(2,3,1)]
 
 #BINOMIAL-REGRESSION
-binomial_resgressor = glm(Class~.,family = "binomial",data = training_set)
-predict_set = predict.glm(binomial_resgressor,type = "response",test_set)
+binomial_resgressor = glm(Class~.,family = "binomial",data = training_pca_set)
+predict_set = predict.glm(binomial_resgressor,type = "response",test_pca_set)
 
 #plot for binomial-regression
-par(mfrow=c(1,9))
-for(i in 1:9) {
-  boxplot(datasets[,i], main=names(datasets)[i])
+par(mfrow=c(1,3))
+for(i in 1:3) {
+  boxplot(predict_set[,i], main=names(predict_set)[i])
 }
 
 
@@ -55,3 +55,6 @@ svm_model=svm(Class~.,data = datasets)
 
 #MULTIVARIENT-REGRESSION
 multivarient_regressor = lm(formula = Class~.,data = training_set)
+#plot(svm_model,data = datasets,dependentvariable~independent,slice=list(missvar=position,missvar=position))
+
+type.convert(datasets)
